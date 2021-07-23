@@ -33,7 +33,7 @@ game_images = [rock, paper, scissors]
 while True:
     try:
         user_choice = int(input("What do you choose? Type 0 for Rock, 1 for Paper or 2 for Scissors.\n"))
-        if user_choice <= 3 and user_choice > 0 :
+        if user_choice <= 3 and user_choice >= 0 :
             print(game_images[user_choice])
             computer_choice = random.randint(0, 2)
             print("Computer chose:")
