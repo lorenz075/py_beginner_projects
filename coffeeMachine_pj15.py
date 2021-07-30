@@ -31,6 +31,15 @@ resources = {
     "money": 0
 }
 
+def refund_ingredients(drink, ingredient):
+    cost =  MENU[drink]["ingredients"][ingredient]
+    resource = resources[ingredient]
+    if resource >= cost:
+        resources[ingredient] = resource + cost
+        return True
+    else:
+        return False
+
 def show_report():
     print(f"Water: {resources['water']}ml\nMilk: {resources['milk']}ml\nCoffee: {resources['coffee']}g\nMoney: ${resources['money']} ")
 
@@ -49,24 +58,25 @@ def calculate_given_money():
     return given_money
 
 def check_enough_money(drink, given_money):
-    cost = MENU[drink]['cost']
-    if cost < given_money:
-        resources['money'] += cost
-        change = given_money - cost
+    price = MENU[drink]['cost']
+    if price < given_money:
+        resources['money'] += price
+        change = given_money - price
         print(f"Here is ${round(change, 2)} in change")
         print(f"Here is your ☕ {drink}")
-    elif cost == given_money:
+    elif price == given_money:
         resources['money'] += given_money
         print(f"Here is your ☕ {drink}")
     else:
-        False    
+        print("Not enough money!")
+        return False    
 
 def calculate_rest(drink, ingredient):
     cost =  MENU[drink]["ingredients"][ingredient]
     resource = resources[ingredient]
     if resource >= cost:
         resources[ingredient] = resource - cost
-        return resource - cost
+        return True
     else:
         return False
     
@@ -88,9 +98,13 @@ while True:
                 print("Sorry, not enough coffee.")
                 break
             else:
-                print("Insert the coins.")
                 value_of_coins = calculate_given_money()
                 enough_money = check_enough_money('espresso', value_of_coins)
+                if not enough_money:
+                    refund_ingredients('espresso', 'water')
+                    refund_ingredients('espresso', 'milk')
+                    refund_ingredients('espresso', 'coffee')
+                print("Insert the coins.")
                 break
             
         elif client_choice == 'latte':
@@ -107,6 +121,10 @@ while True:
                 print("Insert the coins.")
                 value_of_coins = calculate_given_money()
                 enough_money = check_enough_money('latte', value_of_coins)
+                if not enough_money:
+                    refund_ingredients('latte', 'water')
+                    refund_ingredients('latte', 'milk')
+                    refund_ingredients('latte', 'coffee')
                 break
             
         elif client_choice == 'cappucino':
@@ -123,6 +141,10 @@ while True:
                 print("Insert the coins.")
                 value_of_coins = calculate_given_money()
                 enough_money = check_enough_money('cappucino', value_of_coins)
+                if not enough_money:
+                    refund_ingredients('cappucino', 'water')
+                    refund_ingredients('cappucino', 'milk')
+                    refund_ingredients('cappucino', 'coffee')
                 break
         
             
